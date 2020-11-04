@@ -1,0 +1,12 @@
+.idea
+*.iml
+.env
+
+wknl-mysql/tmp/Contract_Organization_dump.sql
+wknl-mysql/tmp/SapMessage_dump.sql
+
+/ping-federate/tmp/pfin/instance/server/default/conf/pingfederate.lic
+/ping-federate/**/pfout/
+/ping-directory/**/pdout/
+
+common/
