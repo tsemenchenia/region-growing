@@ -58,7 +58,6 @@ public class ColorBasedRegionFinderImpl implements RegionFinder {
 
                         for (int x = Math.max(0, checkPointX - 1); x < Math.min(imageWidth, checkPointX + 2); x++) {
                             for (int y = Math.max(0, checkPointY - 1); y < Math.min(imageHeight, checkPointY + 2); y++) {
-
                                 Color neighborColor = new Color(image.getRGB(x, y));
                                 if (!visitedPoints[x][y] && isMatched(neighborColor)) {
                                     pointsToCheck.add(new Point(x, y));
