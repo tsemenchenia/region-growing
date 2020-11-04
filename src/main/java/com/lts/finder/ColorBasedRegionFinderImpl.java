@@ -1,46 +1,40 @@
 package com.lts.finder;
 
+import lombok.Setter;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
-public class RegionFinderImpl implements RegionFinder {
+public class ColorBasedRegionFinderImpl implements RegionFinder {
 
+    private static final Color DEFAULT_REGION_COLOR = new Color(255, 255, 255);
     private static final int MAX_COLOR_DIFFERENCE_DEFAULT_VALUE = 80;
     private static final int MIN_REGION_SIZE_DEFAULT_VALUE = 50;
 
-    private final int maxColorDifference;
-    private final int minRegionSize;
+    @Setter
+    private int maxColorDifference;
 
-    public RegionFinderImpl() {
+    @Setter
+    private int minRegionSize;
+
+    @Setter
+    private Color regionColor;
+
+    public ColorBasedRegionFinderImpl() {
         this(MAX_COLOR_DIFFERENCE_DEFAULT_VALUE, MIN_REGION_SIZE_DEFAULT_VALUE);
     }
 
-    public RegionFinderImpl(int maxColorDiff, int minRegionSize) {
+    public ColorBasedRegionFinderImpl(int maxColorDiff, int minRegionSize) {
+        this.regionColor = DEFAULT_REGION_COLOR;
         this.maxColorDifference = maxColorDiff;
         this.minRegionSize = minRegionSize;
     }
 
-    public boolean match(Color c1, Color c2) {
-        if (c2.getRed() - c1.getRed() > maxColorDifference) {
-            return false;
-        } else if (c2.getRed() - c1.getRed() < -maxColorDifference) {
-            return false;
-        } else if (c2.getBlue() - c1.getBlue() > maxColorDifference) {
-            return false;
-        } else if (c2.getBlue() - c1.getBlue() < -maxColorDifference) {
-            return false;
-        } else if (c2.getGreen() - c1.getGreen() > maxColorDifference) {
-            return false;
-        } else if (c2.getGreen() - c1.getGreen() < -maxColorDifference) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public List<List<Point>> findRegions(BufferedImage image, Color color) {
+    public List<List<Point>> findRegions(BufferedImage image) {
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
         boolean[][] visitedPoints = new boolean[imageWidth][imageHeight];
@@ -66,7 +60,7 @@ public class RegionFinderImpl implements RegionFinder {
                             for (int y = Math.max(0, checkPointY - 1); y < Math.min(imageHeight, checkPointY + 2); y++) {
 
                                 Color neighborColor = new Color(image.getRGB(x, y));
-                                if (!visitedPoints[x][y] && match(color, neighborColor)) {
+                                if (!visitedPoints[x][y] && isMatched(neighborColor)) {
                                     pointsToCheck.add(new Point(x, y));
                                 }
 
@@ -84,6 +78,25 @@ public class RegionFinderImpl implements RegionFinder {
         }
 
         return regions;
+    }
+
+    private boolean isMatched(Color neighbourPointColor) {
+        if (neighbourPointColor.getRed() - regionColor.getRed() > maxColorDifference) {
+            return false;
+        }
+        if (neighbourPointColor.getRed() - regionColor.getRed() < -maxColorDifference) {
+            return false;
+        }
+        if (neighbourPointColor.getBlue() - regionColor.getBlue() > maxColorDifference) {
+            return false;
+        }
+        if (neighbourPointColor.getBlue() - regionColor.getBlue() < -maxColorDifference) {
+            return false;
+        }
+        if (neighbourPointColor.getGreen() - regionColor.getGreen() > maxColorDifference) {
+            return false;
+        }
+        return neighbourPointColor.getGreen() - regionColor.getGreen() >= -maxColorDifference;
     }
 
 }

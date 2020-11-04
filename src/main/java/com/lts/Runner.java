@@ -1,7 +1,7 @@
 package com.lts;
 
 import com.lts.finder.RegionFinder;
-import com.lts.finder.RegionFinderImpl;
+import com.lts.finder.ColorBasedRegionFinderImpl;
 import com.lts.util.ImageUtil;
 
 import javax.imageio.ImageIO;
@@ -22,8 +22,8 @@ public class Runner {
             URL resource = Objects.requireNonNull(classLoader.getResource("IM" + i + ".jpg"));
             BufferedImage sourceImage = ImageIO.read(new File(resource.getFile()));
 
-            RegionFinder regionFinder = new RegionFinderImpl();
-            List<List<Point>> regions = regionFinder.findRegions(sourceImage, new Color(255, 255, 255));
+            RegionFinder regionFinder = new ColorBasedRegionFinderImpl();
+            List<List<Point>> regions = regionFinder.findRegions(sourceImage);
 
             BufferedImage coloredImage = ImageUtil.colorRegions(sourceImage, regions);
 

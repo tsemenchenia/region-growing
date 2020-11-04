@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface RegionFinder {
 
-    boolean match(Color c1, Color c2);
-
-    List<List<Point>> findRegions(BufferedImage image, Color color);
+    List<List<Point>> findRegions(BufferedImage image);
 
 }
